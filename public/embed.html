@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live visitors</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #0b0c0e;
+      color: #edeff3;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 14px;
+      border-radius: 99px;
+      border: 1px solid #23272e;
+      background: #111318;
+      box-shadow: 0 8px 24px -14px rgba(0,0,0,.9);
+      font-size: 13px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 99px; background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,.5); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,.45); } 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); } }
+    b { font-variant-numeric: tabular-nums; font-weight: 600; }
+    span.muted { color: #6f7883; font-size: 11.5px; }
+    .bars { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+    .bars i { width: 3px; background: #2b3038; border-radius: 2px; min-height: 2px; transition: height .3s; }
+    .bars i.hot { background: #c8f751; }
+  </style>
+</head>
+<body>
+  <div class="badge">
+    <span class="dot"></span>
+    <b id="count">0</b>
+    <span class="muted">visitors on site</span>
+    <span class="bars" id="bars"></span>
+  </div>
+  <script>
+    (function () {
+      var key = new URLSearchParams(location.search).get('key') || '';
+      var countEl = document.getElementById('count');
+      var barsEl = document.getElementById('bars');
+      if (!key) { countEl.textContent = '—'; return; }
+
+      function paint(perMinute) {
+        barsEl.innerHTML = '';
+        perMinute.slice(-12).forEach(function (v) {
+          var bar = document.createElement('i');
+          bar.style.height = Math.max(2, Math.min(16, v * 5)) + 'px';
+          if (v > 0) bar.className = 'hot';
+          barsEl.appendChild(bar);
+        });
+      }
+
+      function poll() {
+        fetch('/api/public/live?key=' + encodeURIComponent(key), { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d) return;
+            countEl.textContent = d.active;
+            paint(d.perMinute || []);
+          })
+          .catch(function () {});
+      }
+      poll();
+      setInterval(poll, 20000);
+    })();
+  </script>
+</body>
+</html>

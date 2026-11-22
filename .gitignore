@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+out/
+dist/
+
+# Local state / data
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Screenshots generated during design review
+shots/
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

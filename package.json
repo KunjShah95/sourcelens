@@ -1,0 +1,29 @@
+{
+  "name": "sourcelens",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SourceLens — traffic-source intelligence with SEO, AEO and GEO built in. Zero dependencies.",
+  "main": "server.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node --experimental-sqlite --no-warnings server.js",
+    "dev": "node --experimental-sqlite --no-warnings --watch server.js",
+    "seed": "node --experimental-sqlite --no-warnings scripts/seed.js",
+    "reset": "node --experimental-sqlite --no-warnings scripts/reset.js",
+    "supabase:check": "node scripts/supabase-check.js",
+    "web:dev": "npm --prefix web run dev",
+    "web:build": "npm --prefix web run build",
+    "web:start": "npm --prefix web run start"
+  },
+  "keywords": [
+    "analytics",
+    "traffic-sources",
+    "seo",
+    "aeo",
+    "geo",
+    "privacy"
+  ],
+  "license": "MIT"
+}

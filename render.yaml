@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: sourcelens
+    runtime: docker
+    plan: starter
+    region: oregon
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: SOURCELENS_SALT
+        generateValue: true
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: ALLOW_AUTO_SITE
+        value: "false"
+      - key: CORS_ORIGIN
+        value: "*"
